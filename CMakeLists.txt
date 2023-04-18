@@ -131,8 +131,15 @@ cmake_dependent_option(CORRADE_WITH_MAIN "Build Main library" ON "NOT CORRADE_WI
 option(CORRADE_BUILD_DEPRECATED "Include deprecated API in the build" OFF)
 option(CORRADE_BUILD_EXAMPLES "build examples for test" ON)
 option(CORRADE_BUILD_MULTITHREADED "Build in a way that makes it possible to safely use certain Corrade features simultaneously in multiple threads" ON)
+option(CORRADE_BUILD_NOT_CONF_DATA "Not build plugin .conf meta data surpport" ON)
 
 option(CORRADE_BUILD_STATIC "Build static libraries (default are shared)" OFF)
+
+# at wasm not need conf meta
+if(CORRADE_BUILD_NOT_CONF_DATA)
+    set(CORRADE_PLUGINMANAGER_NO_CONF_META_SUPPORT 1)
+endif()
+
 # Disable PIC on Emscripten by default (but still allow it to be enabled
 # explicitly if one so desired). Currently causes linker errors related to
 # __memory_base etc.: https://github.com/emscripten-core/emscripten/issues/8761

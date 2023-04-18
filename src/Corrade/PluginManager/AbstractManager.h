@@ -589,6 +589,33 @@ See @ref plugin-management for more information about plugin compilation.
    internals. It's however passed as const& to make it possible for people to
    implement plugins without even having to include the StringView header. */
 #ifdef CORRADE_STATIC_PLUGIN
+
+#ifdef CORRADE_PLUGINMANAGER_NO_CONF_META_SUPPORT
+#define CORRADE_PLUGIN_REGISTER(name, className, interface_)                \
+    namespace {                                                             \
+        Corrade::PluginManager::Implementation::StaticPlugin staticPlugin_##name; \
+    }                                                                       \
+    int pluginImporter_##name();                                            \
+    extern const unsigned char resourceData_##name[];                       \
+    extern const unsigned int resourceSize_##name;                          \
+    int pluginImporter_##name() {                                           \
+        staticPlugin_##name.plugin = #name;                                 \
+        staticPlugin_##name.interface = interface_;                         \
+        staticPlugin_##name.instancer =                                     \
+            [](Corrade::PluginManager::AbstractManager& manager, const Corrade::Containers::StringView& plugin) -> void* { \
+                return new className{manager, plugin};                      \
+            };                                                              \
+        staticPlugin_##name.initializer = className::initialize;            \
+        staticPlugin_##name.finalizer = className::finalize;                \
+        Corrade::PluginManager::AbstractManager::importStaticPlugin(CORRADE_PLUGIN_VERSION, staticPlugin_##name); \
+        return 1;                                                           \
+    }                                                                       \
+    int pluginEjector_##name();                                             \
+    int pluginEjector_##name() {                                            \
+        Corrade::PluginManager::AbstractManager::ejectStaticPlugin(CORRADE_PLUGIN_VERSION, staticPlugin_##name); \
+        return 1;                                                           \
+    }
+#else
 #define CORRADE_PLUGIN_REGISTER(name, className, interface_)                \
     namespace {                                                             \
         Corrade::PluginManager::Implementation::StaticPlugin staticPlugin_##name; \
@@ -615,6 +642,8 @@ See @ref plugin-management for more information about plugin compilation.
         Corrade::PluginManager::AbstractManager::ejectStaticPlugin(CORRADE_PLUGIN_VERSION, staticPlugin_##name); \
         return 1;                                                           \
     }
+#endif
+
 #elif defined(CORRADE_DYNAMIC_PLUGIN)
 #define CORRADE_PLUGIN_REGISTER(name, className, interface)                 \
     extern "C" CORRADE_PLUGIN_EXPORT int pluginVersion();                   \

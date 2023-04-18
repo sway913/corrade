@@ -39,5 +39,6 @@ endif()
 
 add_subdirectory(interconnect)
 add_subdirectory(pluginmanager)
+add_subdirectory(pluginmanager2)
 add_subdirectory(resource)
 

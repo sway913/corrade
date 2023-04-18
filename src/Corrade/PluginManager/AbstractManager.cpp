@@ -1111,6 +1111,10 @@ AbstractManager::Plugin::Plugin(const Containers::StringView name, const Contain
         }
 
         loadState = LoadState::WrongMetadataFile;
+
+#ifdef CORRADE_PLUGINMANAGER_NO_CONF_META_SUPPORT
+        loadState = LoadState::NotLoaded;
+#endif // !CORRADE_PLUGINMANAGER_NO_CONF_META_SUPPORT
     }
 }
 #endif
