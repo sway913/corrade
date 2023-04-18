@@ -30,6 +30,9 @@
 # etc. properties accept generator expressions.
 cmake_minimum_required(VERSION 3.4)
 
+# project name and supported languages
+project(Corrade CXX)
+
 # As reported in https://github.com/mosra/corrade/issues/52 and then tracked
 # down to https://gitlab.kitware.com/cmake/cmake/issues/18099, CMake < 3.12 has
 # various issues with the new XCode, resulting in weird build failures in
@@ -59,8 +62,6 @@ endif()
 if(POLICY CMP0077)
     cmake_policy(SET CMP0077 NEW)
 endif()
-
-project(Corrade CXX)
 
 # Use folders for nice tree in Visual Studio and XCode
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

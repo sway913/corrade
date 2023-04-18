@@ -6,9 +6,15 @@
 #
 #  mkdir build-emscripten-wasm && cd build-emscripten-wasm
 #  cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchains/generic/Emscripten-wasm.cmake
+#  cmake --trace -DCMAKE_TOOLCHAIN_FILE="D:\work\test_github\corrade\toolchains2\generic\Emscripten-wasm.cmake" ..
 #
 # On MSVC set "intelliSenseMode": "linux-gcc-x86" in CMakeSettings.json to get
 # IntelliSense to work.
+
+# Check that the EMSDK or EMSCRIPTEN_PREFIX environment variable is defined
+if(NOT DEFINED ENV{EMSDK} AND NOT EMSCRIPTEN_PREFIX)
+   message(FATAL_ERROR "The EMSDK or EMSCRIPTEN_PREFIX environment variable must be defined")
+endif()
 
 set(CMAKE_SYSTEM_NAME Emscripten)
 
@@ -23,8 +29,10 @@ if(CMAKE_HOST_WIN32)
 endif()
 
 if(NOT EMSCRIPTEN_PREFIX)
-    if(DEFINED ENV{EMSCRIPTEN})
-        file(TO_CMAKE_PATH "$ENV{EMSCRIPTEN}" EMSCRIPTEN_PREFIX)
+    if(DEFINED ENV{EMSDK})
+        file(TO_CMAKE_PATH "$ENV{EMSDK}" EMSCRIPTEN_PREFIX)
+
+    message(${EMSCRIPTEN_PREFIX})
     # On Homebrew the sysroot is here, however emcc is also available in
     # /usr/local/bin. It's impossible to figure out the sysroot from there, so
     # try this first
