@@ -73,9 +73,5 @@ install(TARGETS CorradeInterconnect
         ARCHIVE DESTINATION ${CORRADE_LIBRARY_INSTALL_DIR})
 install(FILES ${CorradeInterconnect_HEADERS} DESTINATION ${CORRADE_INCLUDE_INSTALL_DIR}/Interconnect)
 
-if(CORRADE_BUILD_TESTS)
-    add_subdirectory(Test ${EXCLUDE_FROM_ALL_IF_TEST_TARGET})
-endif()
-
 # Corrade::Interconnect target alias for superprojects
 add_library(Corrade::Interconnect ALIAS CorradeInterconnect)

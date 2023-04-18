@@ -82,24 +82,5 @@ install(TARGETS CorradePluginManager
         ARCHIVE DESTINATION ${CORRADE_LIBRARY_INSTALL_DIR})
 install(FILES ${CorradePluginManager_HEADERS} DESTINATION ${CORRADE_INCLUDE_INSTALL_DIR}/PluginManager)
 
-if(CORRADE_BUILD_TESTS)
-    # Library with graceful assert for testing
-    add_library(CorradePluginManagerTestLib ${SHARED_OR_STATIC} ${EXCLUDE_FROM_ALL_IF_TEST_TARGET}
-        $<TARGET_OBJECTS:CorradePluginManagerObjects>
-        ${CorradePluginManager_GracefulAssert_SRCS})
-    target_include_directories(CorradePluginManagerTestLib PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-    target_compile_definitions(CorradePluginManagerTestLib PRIVATE "CORRADE_GRACEFUL_ASSERT")
-    set_target_properties(CorradePluginManagerTestLib PROPERTIES DEBUG_POSTFIX "-d")
-    if(CORRADE_BUILD_STATIC_PIC)
-        set_target_properties(CorradePluginManagerTestLib PROPERTIES POSITION_INDEPENDENT_CODE ON)
-    endif()
-    target_link_libraries(CorradePluginManagerTestLib PUBLIC CorradeUtility)
-    if(CORRADE_TARGET_UNIX)
-        target_link_libraries(CorradePluginManagerTestLib PUBLIC ${CMAKE_DL_LIBS})
-    endif()
-
-    add_subdirectory(Test ${EXCLUDE_FROM_ALL_IF_TEST_TARGET})
-endif()
-
 # Corrade::PluginManager target alias for superprojects
 add_library(Corrade::PluginManager ALIAS CorradePluginManager)

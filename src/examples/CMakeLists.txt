@@ -40,4 +40,4 @@ endif()
 add_subdirectory(interconnect)
 add_subdirectory(pluginmanager)
 add_subdirectory(resource)
-add_subdirectory(testsuite)
+

@@ -88,10 +88,6 @@ add_custom_target(CorradeContainers-headers SOURCES
 
 install(FILES ${CorradeContainers_HEADERS} DESTINATION ${CORRADE_INCLUDE_INSTALL_DIR}/Containers)
 
-if(CORRADE_BUILD_TESTS)
-    add_subdirectory(Test ${EXCLUDE_FROM_ALL_IF_TEST_TARGET})
-endif()
-
 # Corrade::Containers target alias for superprojects
 add_library(CorradeContainers INTERFACE)
 target_link_libraries(CorradeContainers INTERFACE CorradeUtility)

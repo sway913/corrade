@@ -11,7 +11,6 @@ cmake .. ^
     -DCMAKE_INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%/deps-native ^
     -DCORRADE_WITH_INTERCONNECT=OFF ^
     -DCORRADE_WITH_PLUGINMANAGER=OFF ^
-    -DCORRADE_WITH_TESTSUITE=OFF ^
     -DCORRADE_WITH_UTILITY=OFF ^
     -G Ninja || exit /b
 cmake --build . || exit /b

@@ -45,4 +45,6 @@ add_subdirectory(Corrade)
 # Corrade include dir for superprojects
 set(CORRADE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE INTERNAL "" FORCE)
 
-add_subdirectory(debuggers)
+if(CORRADE_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()

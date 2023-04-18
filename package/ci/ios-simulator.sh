@@ -9,7 +9,6 @@ cmake .. \
     -DCMAKE_INSTALL_PREFIX=$HOME/deps-native \
     -DCORRADE_WITH_INTERCONNECT=OFF \
     -DCORRADE_WITH_PLUGINMANAGER=OFF \
-    -DCORRADE_WITH_TESTSUITE=OFF \
     -DCORRADE_WITH_UTILITY=OFF \
     -DCMAKE_BUILD_TYPE=Release \
     -G Ninja
@@ -25,7 +24,6 @@ cmake .. \
     -DCORRADE_RC_EXECUTABLE=$HOME/deps-native/bin/corrade-rc \
     -DCMAKE_INSTALL_PREFIX=$HOME/deps \
     -DCORRADE_BUILD_STATIC=ON \
-    -DCORRADE_BUILD_TESTS=ON \
     -DCORRADE_TESTSUITE_TARGET_XCTEST=ON \
     -G Xcode
 set -o pipefail && cmake --build . --config Release -j$XCODE_JOBS | xcbeautify

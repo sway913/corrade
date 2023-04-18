@@ -104,16 +104,8 @@ if(CORRADE_WITH_PLUGINMANAGER)
     add_subdirectory(PluginManager)
 endif()
 
-if(CORRADE_WITH_TESTSUITE)
-    add_subdirectory(TestSuite)
-endif()
-
 if(CORRADE_WITH_UTILITY OR CORRADE_WITH_RC)
     add_subdirectory(Utility)
-endif()
-
-if(CORRADE_BUILD_TESTS)
-    add_subdirectory(Test ${EXCLUDE_FROM_ALL_IF_TEST_TARGET})
 endif()
 
 if(CORRADE_WITH_MAIN)

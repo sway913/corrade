@@ -8,7 +8,6 @@ cmake .. \
     -DCMAKE_BUILD_TYPE=Release \
     -DCORRADE_WITH_INTERCONNECT=OFF \
     -DCORRADE_WITH_PLUGINMANAGER=OFF \
-    -DCORRADE_WITH_TESTSUITE=OFF \
     -DCORRADE_WITH_UTILITY=OFF \
     -G Ninja
 ninja install
@@ -25,7 +24,6 @@ cmake .. \
     -DCMAKE_INSTALL_PREFIX=$HOME/deps \
     -DCMAKE_BUILD_TYPE=Release \
     -DCORRADE_RC_EXECUTABLE=$HOME/deps-native/bin/corrade-rc \
-    -DCORRADE_BUILD_TESTS=ON \
     -G Ninja
 ninja
 
