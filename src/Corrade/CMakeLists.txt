@@ -45,7 +45,8 @@ find_package(Git)
 if(Git_FOUND)
     # Match only tags starting with `v`, always use the long format so we have
     # a commit hash also on a tagged version
-    execute_process(COMMAND ${GIT_EXECUTABLE} describe --match "v*" --long
+    # old: git describe --match "v*" --long
+    execute_process(COMMAND ${GIT_EXECUTABLE} log -1 --pretty=format:%h
         OUTPUT_VARIABLE CORRADE_VERSION_STRING
         RESULT_VARIABLE _CORRADE_VERSION_RESULT
         ERROR_VARIABLE _CORRADE_VERSION_ERROR
@@ -62,19 +63,22 @@ if(Git_FOUND)
         # that matter because, again, HELLO WINDOWS).
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/package/git
         OUTPUT_STRIP_TRAILING_WHITESPACE)
-    if(CORRADE_VERSION_STRING MATCHES "^v([0-9][0-9][0-9][0-9])\\.0?([0-9][0-9]?)-([0-9]+)-g([a-f0-9]+)$")
-        set(CORRADE_VERSION_YEAR ${CMAKE_MATCH_1})
-        set(CORRADE_VERSION_MONTH ${CMAKE_MATCH_2})
-        set(CORRADE_VERSION_COMMIT ${CMAKE_MATCH_3})
+
+    if(CORRADE_VERSION_STRING MATCHES "^([a-f0-9]+)$")
         # Otherwise if commit is 0, it would #undef the variable
-        set(CORRADE_VERSION_COMMIT " ${CORRADE_VERSION_COMMIT}")
-        set(CORRADE_VERSION_HASH ${CMAKE_MATCH_4})
+        set(CORRADE_VERSION_COMMIT "0")
+        set(CORRADE_VERSION_HASH ${CORRADE_VERSION_STRING})
     elseif(_CORRADE_VERSION_RESULT EQUAL 0)
         message(WARNING "Can't match Git version from ${CORRADE_VERSION_STRING}")
     else()
         message(WARNING "Can't match Git version: ${_CORRADE_VERSION_ERROR}")
     endif()
 endif()
+
+# Get current built time
+STRING(TIMESTAMP CORRADE_VERSION_YEAR %Y-%m-%d)
+STRING(TIMESTAMP CORRADE_VERSION_MONTH %H:%M:%S)
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake
                ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
