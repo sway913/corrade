@@ -5,9 +5,8 @@
 # to point to it or pass it explicitly via -DEMSCRIPTEN_PREFIX=<path>.
 #
 #  mkdir build-emscripten-wasm && cd build-emscripten-wasm
-#  cmake .. -DCMAKE_TOOLCHAIN_FILE=../toolchains/generic/Emscripten-wasm.cmake
-#  cmake --trace -DCMAKE_TOOLCHAIN_FILE="D:\work\test_github\corrade\toolchains2\generic\Emscripten-wasm.cmake" ..
-#
+#  cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE="../toolchains2/generic/Emscripten-wasm.cmake" ..
+#  cmake --trace -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE="../toolchains2/generic/Emscripten-wasm.cmake" ..
 # On MSVC set "intelliSenseMode": "linux-gcc-x86" in CMakeSettings.json to get
 # IntelliSense to work.
 
@@ -17,37 +16,16 @@ if(NOT DEFINED ENV{EMSDK} AND NOT EMSCRIPTEN_PREFIX)
 endif()
 
 set(CMAKE_SYSTEM_NAME Emscripten)
+message("set CMAKE_SYSTEM_NAME:${CMAKE_SYSTEM_NAME}")
 
 # Help CMake find the platform file
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/../modules ${CMAKE_MODULE_PATH})
 
-# Give a hand to first-time Windows users
-if(CMAKE_HOST_WIN32)
-    if(CMAKE_GENERATOR MATCHES "Visual Studio")
-        message(FATAL_ERROR "Visual Studio project generator doesn't support cross-compiling to Emscripten. Please use -G Ninja or other generators instead.")
-    endif()
-endif()
 
 if(NOT EMSCRIPTEN_PREFIX)
-    if(DEFINED ENV{EMSDK})
-        file(TO_CMAKE_PATH "$ENV{EMSDK}" EMSCRIPTEN_PREFIX)
-
-    message(${EMSCRIPTEN_PREFIX})
-    # On Homebrew the sysroot is here, however emcc is also available in
-    # /usr/local/bin. It's impossible to figure out the sysroot from there, so
-    # try this first
-    elseif(EXISTS "/usr/local/opt/emscripten/libexec/emcc")
-        set(EMSCRIPTEN_PREFIX "/usr/local/opt/emscripten/libexec")
-    # Look for emcc in the path as a last resort
-    else()
-        find_file(_EMSCRIPTEN_EMCC_EXECUTABLE emcc)
-        if(EXISTS ${_EMSCRIPTEN_EMCC_EXECUTABLE})
-            get_filename_component(EMSCRIPTEN_PREFIX ${_EMSCRIPTEN_EMCC_EXECUTABLE} DIRECTORY)
-        else()
-            set(EMSCRIPTEN_PREFIX "/usr/lib/emscripten")
-        endif()
-        mark_as_advanced(_EMSCRIPTEN_EMCC_EXECUTABLE)
-    endif()
+    file(TO_CMAKE_PATH "$ENV{EMSDK}" EMSCRIPTEN_ROOT)
+    set(EMSCRIPTEN_PREFIX "${EMSCRIPTEN_ROOT}/upstream/emscripten")
+    message("EMSCRIPTEN_PREFIX:${EMSCRIPTEN_PREFIX}")
 endif()
 
 set(EMSCRIPTEN_TOOLCHAIN_PATH "${EMSCRIPTEN_PREFIX}/system")

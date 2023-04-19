@@ -33,6 +33,8 @@ cmake_minimum_required(VERSION 3.4)
 # project name and supported languages
 project(Corrade CXX)
 
+message("CMAKE_SYSTEM_NAME:${CMAKE_SYSTEM_NAME}")
+
 # As reported in https://github.com/mosra/corrade/issues/52 and then tracked
 # down to https://gitlab.kitware.com/cmake/cmake/issues/18099, CMake < 3.12 has
 # various issues with the new XCode, resulting in weird build failures in
@@ -130,16 +132,11 @@ cmake_dependent_option(CORRADE_WITH_RC "Build the corrade-rc utility" ON "NOT CO
 cmake_dependent_option(CORRADE_WITH_MAIN "Build Main library" ON "NOT CORRADE_WITH_RC" ON)
 
 option(CORRADE_BUILD_DEPRECATED "Include deprecated API in the build" OFF)
-option(CORRADE_BUILD_EXAMPLES "build examples for test" ON)
+option(CORRADE_BUILD_EXAMPLES "build examples for test" OFF)
 option(CORRADE_BUILD_MULTITHREADED "Build in a way that makes it possible to safely use certain Corrade features simultaneously in multiple threads" ON)
 option(CORRADE_BUILD_NOT_CONF_DATA "Not build plugin .conf meta data surpport" ON)
 
 option(CORRADE_BUILD_STATIC "Build static libraries (default are shared)" OFF)
-
-# at wasm not need conf meta
-if(CORRADE_BUILD_NOT_CONF_DATA)
-    set(CORRADE_PLUGINMANAGER_NO_CONF_META_SUPPORT 1)
-endif()
 
 # Disable PIC on Emscripten by default (but still allow it to be enabled
 # explicitly if one so desired). Currently causes linker errors related to
@@ -157,6 +154,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL Emscripten)
     set(CORRADE_TARGET_EMSCRIPTEN 1)
     # It's meaningless to use dynamic libraries with Emscripten
     set(CORRADE_BUILD_STATIC ON)
+    set(CORRADE_BUILD_EXAMPLES OFF)
+    set(CORRADE_BUILD_NOT_CONF_DATA ON)
 elseif(UNIX)
     # Both APPLE and UNIX are defined on OSX
     if(APPLE)
@@ -185,6 +184,12 @@ elseif(WIN32)
     if(WINDOWS_PHONE OR WINDOWS_STORE)
         set(CORRADE_TARGET_WINDOWS_RT 1)
     endif()
+endif()
+
+
+# at wasm not need conf meta
+if(CORRADE_BUILD_NOT_CONF_DATA)
+    set(CORRADE_PLUGINMANAGER_NO_CONF_META_SUPPORT 1)
 endif()
 
 # Platform-specific options
@@ -367,7 +372,7 @@ if(_CORRADE_ACCEPT_DEPRECATED_UNPREFIXED_OPTIONS AND CORRADE_BUILD_DEPRECATED)
     endif()
 endif()
 
-if(CMAKE_CROSSCOMPILING)
+if(CMAKE_CROSSCOMPILING AND NOT CORRADE_BUILD_NOT_CONF_DATA)
     find_program(CORRADE_RC_EXECUTABLE corrade-rc)
     if(NOT CORRADE_RC_EXECUTABLE)
         message(FATAL_ERROR "Native `corrade-rc` executable, which is needed when crosscompiling, was not found. Build it and either make it available through PATH or pass its location to CMake using the CORRADE_RC_EXECUTABLE option.")
