@@ -5,8 +5,11 @@
 # to point to it or pass it explicitly via -DEMSCRIPTEN_PREFIX=<path>.
 #
 #  mkdir build-emscripten-wasm && cd build-emscripten-wasm
-#  cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE="../toolchains2/generic/Emscripten-wasm.cmake" ..
-#  cmake --trace -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE="../toolchains2/generic/Emscripten-wasm.cmake" ..
+#  on windows:
+#  cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE="../toolchains/generic/Emscripten-wasm.cmake" ..
+#  cmake --trace -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE="../toolchains/generic/Emscripten-wasm.cmake" ..
+#  on linux:
+#  cmake -DCMAKE_TOOLCHAIN_FILE="../toolchains/generic/Emscripten-wasm.cmake" ..
 # On MSVC set "intelliSenseMode": "linux-gcc-x86" in CMakeSettings.json to get
 # IntelliSense to work.
 
