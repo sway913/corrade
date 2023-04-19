@@ -26,7 +26,7 @@
 
 # IDE folder in VS, Xcode etc. CMake 3.12+, older versions have only the FOLDER
 # property that would have to be set on each target separately.
-set(CMAKE_FOLDER "Corrade/Utility")
+set(CMAKE_FOLDER "${CMAKE_FOLDER_PREFIX}Corrade/Utility")
 
 if(CORRADE_WITH_UTILITY)
     set(CorradeUtility_SRCS

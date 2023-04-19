@@ -26,7 +26,7 @@
 
 # IDE folder in VS, Xcode etc. CMake 3.12+, older versions have only the FOLDER
 # property that would have to be set on each target separately.
-set(CMAKE_FOLDER "Corrade/PluginManager")
+set(CMAKE_FOLDER "${CMAKE_FOLDER_PREFIX}Corrade/PluginManager")
 
 if(NOT CORRADE_PLUGINMANAGER_NO_DYNAMIC_PLUGIN_SUPPORT)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/configure.h.cmake
